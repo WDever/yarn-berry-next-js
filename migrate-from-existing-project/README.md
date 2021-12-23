@@ -1,27 +1,47 @@
-# Next.js + Tailwind CSS Example
+# VSCode 설정
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+https://yarnpkg.com/getting-started/editor-sdks
 
-## Preview
+아래 과정이 선행되지 않을 시 정상적으로 패키지의 정보를 불러오지 못함.
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+1. [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) 확장 설치
+2. `yarn dlx @yarnpkg/sdks vscode` 커맨드를 통해 .yarn/sdks 디렉토리 생성
+3. TypeScript 버전을 "Use Workspace Version" 로 설정
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+# 기존 Next.js 프로젝트에 yarn berry 적용하기
 
-## Deploy your own
+[https://yarnpkg.com/getting-started/migration](https://yarnpkg.com/getting-started/migration)
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+1. `yarn set version berry` 를 통해 yarn berry 로 전환
+2. `.yarnrc.yml` 파일에 `[nodeLinker: node-modules](https://yarnpkg.com/configuration/yarnrc#nodeLinker)` 추가
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+   `yarnrc` 혹은 `npmrc` 를 사용중이었다면 `yarnrc.yml` 로 마이그레이션 ([참고](https://yarnpkg.com/getting-started/migration#update-your-configuration-to-the-new-settings))
 
-## How to use
+   > Yarnrc files (named this way because they must be called `.yarnrc.yml`) are the one place where you'll be able to configure Yarn's internal settings. While Yarn will automatically find them in the parent directories, they should usually be kept at the root of your project (often your repository). **Starting from the v2, they must be written in valid Yaml and have the right extension** (simply calling your file `.yarnrc` won't do).
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+3. node_modules 삭제 후 `yarn install`
+4. .gitignore
+   1. w Zero-Installs
 
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
+      ```yaml
+      .yarn/*
+      !.yarn/cache
+      !.yarn/patches
+      !.yarn/plugins
+      !.yarn/releases
+      !.yarn/sdks
+      !.yarn/versions
+      ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+   2. w/o Zero-Installs
+
+      ```yaml
+      .pnp.*
+      .yarn/*
+      !.yarn/patches
+      !.yarn/plugins
+      !.yarn/releases
+      !.yarn/sdks
+      !.yarn/versions
+      `
+      ```
